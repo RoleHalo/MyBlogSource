@@ -13,7 +13,7 @@ timezone: ''
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: https://rolehalo.github.io/
+#url: https://rolehalo.github.io/
 permalink: :year/:title/
 permalink_defaults:
 pretty_urls:
@@ -50,11 +50,11 @@ highlight:
   tab_replace: ''
   wrap: true
   hljs: false
-prismjs:
-  enable: false
-  preprocess: true
-  line_number: true
-  tab_replace: ''
+# prismjs:
+#   enable: false
+#   preprocess: true
+#   line_number: true
+#   tab_replace: ''
 
 
 # Home page setting
@@ -106,7 +106,13 @@ deploy:
   type: 'git'
   repo: https://github.com/RoleHalo/rolehalo.github.io.git
   branch: main
-  
+
+# 自动生成sitemap
+sitemap: 
+  path: sitemap.xml
+baidusitemap: 
+  path: baidusitemap.xml 
+
 jsonContent:
     meta: false
     pages: false
@@ -119,7 +125,7 @@ jsonContent:
       content: false
       slug: false
       updated: false
-      comments: false
+      comments: true
       link: false
       permalink: false
       excerpt: false

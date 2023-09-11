@@ -1,66 +1,237 @@
 ---
-title: MySQL学习笔记
-date: 2020-08-03 18:18:12
-tags: MySQL
+title: mysql学习笔记
+date: 2020-06-18 17:18:12
+tags: Mysql
 toc: true
 ---
-### MySQL
+# 目录
+- [目录](#目录)
+  - [写在前面：MySQL安装](#写在前面mysql安装)
+  - [mysql重点内容](#mysql重点内容)
+    - [mysql优化](#mysql优化)
+      - [如何定位慢查询](#如何定位慢查询)
+      - [优化sql语句慢查询](#优化sql语句慢查询)
+      - [索引](#索引)
+      - [sql优化经验](#sql优化经验)
+    - [事务](#事务)
+      - [事务特性（ACID）](#事务特性acid)
+      - [隔离级别](#隔离级别)
+      - [MVCC（多版本并发控制）](#mvcc多版本并发控制)
+    - [日志](#日志)
+    - [锁](#锁)
+
+## 写在前面：MySQL安装
 1. MySQL可以解压到U盘里
 2. 打开解压的文件夹`K:/softwareInstall/mysql-8.0.20-winx64` ，在该文件夹下创建 my.ini 配置文件，编辑 my.ini 配置以下基本信息：
-```bash
-[client]
-# 设置mysql客户端默认字符集
-default-character-set=utf8
- 
-[mysqld]
-# 设置3306端口
-port = 3306
-# 设置mysql的安装目录
-basedir=K:/softwareInstall/mysql-8.0.20-winx64
-# 设置 mysql数据库的数据的存放目录，MySQL 8+ 不需要以下配置，系统自己生成即可，否则有可能报错
-datadir=K:/softwareInstall/mysql-8.0.20-winx64/data
-# 允许最大连接数
-max_connections=20
-# 服务端使用的字符集默认为8比特编码的latin1字符集
-character-set-server=utf8
-# 创建新表时将使用的默认存储引擎
-default-storage-engine=INNODB
-```
+    ```bash
+        [client]
+        # 设置mysql客户端默认字符集
+        default-character-set=utf8
+
+        [mysqld]
+        # 设置3306端口
+        port = 3306
+        # 设置mysql的安装目录
+        basedir=K:/softwareInstall/mysql-8.0.20-winx64
+        # 设置 mysql数据库的数据的存放目录，MySQL 8+ 不需要以下配置，系统自己生成即可，否则有可能报错
+        datadir=K:/softwareInstall/mysql-8.0.20-winx64/data
+        # 允许最大连接数
+        max_connections=20
+        # 服务端使用的字符集默认为8比特编码的latin1字符集
+        character-set-server=utf8
+        # 创建新表时将使用的默认存储引擎
+        default-storage-engine=INNODB
+    ```
 3. 启动下 MySQL 数据库：`cd K:\softwareInstall\mysql-8.0.11\bin` `mysqld --initialize --console`
-
 在 Windows 系统下，以`管理员`身份打开命令窗口(cmd)，进入 MySQL 安装目录的 bin 目录。
-```
-启动：
-cd K:/softwareInstall/mysql-8.0.20-winx64/bin
-mysqld --console
-
-关闭：
-cd K:/softwareInstall/mysql-8.0.20-winx64/bin
-mysqladmin -uroot shutdown
-```
+    ```
+        启动：
+        cd K:/softwareInstall/mysql-8.0.20-winx64/bin
+        mysqld --console
+    
+        关闭：
+        cd K:/softwareInstall/mysql-8.0.20-winx64/bin
+        mysqladmin -uroot shutdown
+    ```
 4. 执行完成后，会输出 root 用户的初始默认密码，如：
-```bash
-2018-04-20T02:35:05.464644Z 5 [Note] [MY-010454] [Server] A temporary password is generated for root@localhost: RqUDv!g8j%D;
-```
-
+    ```
+    2018-04-20T02:35:05.464644Z 5 [Note] [MY-010454] [Server] A temporary password is generated for root@localhost: RqUDv!g8j%D;
+    ```
 `RqUDv!g8j%D;`就是初始密码，后续登录需要用到，你也可以在登陆后修改密码。
 5. 输入安装命令：`mysqld install`将`mysql`服务添加到系统的`服务`中，这样下面的命令`net start mysql`才会生效。
 6. 启动输入命令即可：`net start mysql` 停止服务`net stop mysql`
 7. 注意: 在`5.7`版本中需要初始化 data 目录:
-```bash
-cd K:/softwareInstall/mysql-8.0.20-winx64/bin 
-mysqld --initialize-insecure 
-```
+    ```
+    cd K:/softwareInstall/mysql-8.0.20-winx64/bin 
+    mysqld --initialize-insecure 
+    ```
 8. 登录MySQL，当 MySQL 服务已经运行时, 我们可以通过 MySQL 自带的客户端工具登录到 MySQL 数据库中, 首先打开命令提示符, 输入以下格式的命名:
-```bash
-mysql -h 主机名 -u 用户名 -p -h myserver -P 端口
-
-参数说明：
-    -h : 指定客户端所要登录的 MySQL 主机名, 登录本机(localhost 或 127.0.0.1)该参数可以省略;
-    -u : 登录的用户名;
-    -p : 告诉服务器将会使用一个密码来登录, 如果所要登录的用户名密码为空, 可以忽略此选项。
+    ```
+    mysql -h 主机名 -u 用户名 -p -h myserver -P 端口
     
-如果我们要登录本机的 MySQL 数据库，只需要输入以下命令即可：
-mysql -u root -p
-输入 exit 或 quit 退出登录。
-```
+    参数说明：
+        -h : 指定客户端所要登录的 MySQL 主机名, 登录本机(localhost 或 127.0.0.1)该参数可以省略;
+        -u : 登录的用户名;
+        -p : 告诉服务器将会使用一个密码来登录, 如果所要登录的用户名密码为空, 可以忽略此选项。
+        
+    如果我们要登录本机的 MySQL 数据库，只需要输入以下命令即可：
+    mysql -u root -p
+    输入 exit 或 quit 退出登录。
+    ```
+---
+## mysql重点内容
+### mysql优化
+#### 如何定位慢查询
+>     - 聚合查询
+>     - 多表查询
+>     - 表数据量过大
+>     - 深度分页查询
+
+1. 开源工具
+    - 调试工具：Arthas
+    - 运维工具：Skywalking
+2. Mysql自带慢日志
+    ```
+    #开启mysql慢日志查询
+    slow_query_loh=1
+    #设置慢日志的时间为2秒，sql语句执行时间超过2秒。就会使为慢查询，记录慢查询日志（/var/lib/mysql/localhost-slow.log）
+    long_query_time=2
+    ```
+---
+#### 优化sql语句慢查询
+    >     - 聚合查询
+    >     - 多表查询
+    >     - 表数据量过大
+    以上可以通过sql的执行计划解决。
+    
+采用explain或者desc命令获取select语句信息
+- 字段解析
+    - possible_key：当前sql可能会用到的索引
+    - key：sql实际命中的索引 key_len：索引占用的大小（两者结合可以检查索引是否命中 即索引本身存在是否有时效的情况）
+    - extra：额外的==优化建议==
+        1. using where、using index ：查找使用了索引，使用的数据都在索引列，不需要回表查询数据
+        2. using index condition ：查找使用了索引，但需要回表查询数据（**有优化的空间**）
+    - type：sql连接类型。性能由好到差：NULL、system、const、eq_ref、ref、range、index、all
+        1. system：查询系统表
+        2. const：根据主键查询
+        3. eq_ref：主键索引查询或唯一索引查询
+        4. ref：索引查询
+        5. range：范围查询
+        6. index：索引树扫描（需优化）
+        7. all：全盘扫描（需优化）
+---
+#### 索引
+1. 什么是索引
+    - 帮助mysql**高效获取数据**的数据结构（**有序**）。
+    - 提高数据检索的效率，降低数据库的io成本
+    - 通过索引对数据进行排序，降低数据排序的 成本，**降低了cpu的消耗**
+    - 数据库维护着满足**特定查找算法的数据结构**（B+树），这些数据结构以某种方式指向数据，在此基础上实现高级查找算法。这种数据结构就是索引
+2. innodb引擎采用B+树数据结构存储索引
+    - 阶数更多，**路径更短**
+    - 磁盘读写代价更低，**非叶子节点只存储指针**，叶子节点存储数据
+    - 更便于**扫库和区间查询**，叶子节点是一个**双向链表**
+3. 聚簇索引（聚集索引）和非聚簇索引（二级索引）
+    - 聚集索引：数据和索引在一起。必须有，且只有一个。保存**行数据**
+        1. 主键
+        2. 无主键则选（unique）唯一索引
+        3. 若1 2都无，数据库会自动创建id
+    - 二级索引：数据和索引分开存储。可以有多个。只保存**主键值**
+4. 回表查询：一般走**二级索引**情况下会需要回表查询
+5. 覆盖索引：查询使用了索引，且++需要返回的列在**该索引中**全部++可以找到（==非覆盖索引需要回表查询==）
+    - ==MySQL超大分页的处理==：数据量比较大时，使用limit分页查询，需要对数据进行排序，越往后的页需要对数据效率越低
+    - 优化：覆盖索引+子查询
+        ```
+        //查询id第9000000-9000010共10条数据
+        select * from tb_user limit 9000000,10;//会对前9000010条数据全部排序，然后截取9000000-9000010共10条数据
+        
+        //覆盖索引+子查询优化
+        select * from tb_user t (select id from tb_user order by id limit 9000000,10)a //此处为覆盖查询，会比非覆盖查询快得多）
+        where t.id = a.id;
+        ```
+6. 索引创建原则
+    1. ==数据量大，查询频繁。单表超10w==
+    2. ==常常作为查询条件where、排序（order by）、分组（group by）操作的字段==
+    3. 区分度高的列，尽量建立唯一索引。区分度越低，索引效率越低
+    4. 字符串字段，字段较长，针对字段特点建立**前缀索引**
+    5. ==尽量使用联合索引==，减少单列索引。联合索引更多的可以实现覆盖查询，避免回表
+    6. ==控制索引的数量==。索引越多维护成本也越大
+    7. 若索引不能存null值，创建表时使用not null约束
+>     - 主键索引
+>     - 唯一索引
+>     - 根据业务创建的复合索引
+7. 什么时候索引失效
+    1. 复合索引或联合索引时，==违反最左前缀法则==。查询使用的索引从最左开始写，不能跳过索引列
+    2. ==范围查询右边的列==，不能使用索引
+    3. 不要在==索引列上进行运算操作==，否则失效
+    4. ==字符串不加单引号==
+    5. 以%开头的like==模糊查询==，**可能**失效
+        - %在头部会失效，如`%小学%`
+        - %在尾部不会失效，如`小学%`
+#### sql优化经验
+1. 表的设计 （阿里开发手册《嵩山版》）如：
+    - 设置合适的数值
+    - 设置合适的字符串类型char定长效率高，varchar可变长，效率低
+2. 索引（参考索引part）
+3. sql语句
+    - 避免使用select *
+    - 避免造成索引失效
+    - 尽量用union all（可能会查出显示重复数据）代替union 。union会多一次过滤
+    - 避免在where子句中对字段进行表达式操作，以免索引失效
+    - join优化。能用innerjoin就不用left join/rignt join。内连接会对比两个表，优先把小表放外边
+4. 主从复制、读写分离：数据库读的操作较多时，为了避免操作造成的性能影响，可以使用读写分离解决数据库写入影响查询效率的问题
+5. 分库分表
+
+---
+
+### 事务
+事务是一组操作的集合，是不可分割的工作单位，事务会把所有操作作为一个整体一起向系统提交或撤销操作请求。要么同时成功，要么同时失败
+#### 事务特性（ACID）
+1. 原子性（**A**tomicity）:事务是不可分割的最小操作单元。通过**undo log**（回滚日志） 来保证的
+2. 一致性（**C**onsistency）：事务完成后数据保持一致状态。通过**持久性+原子性+隔离性**来保证
+3. 隔离性（**I**solation）：事务在不受外部并发操作的影响下独立运行。通过 **MVCC（多版本并发控制） 或锁机**制来保证的
+4. 持久性（**D**urability）：持久化。事务一旦完成或者回滚，对数据库的数据的改变是永久的。通过**redo log**（重做日志）来保证的
+
+#### 隔离级别
+并发事务问题严重性： 脏读>不可重复读>幻读
+1. 读未提交：解决不了问题
+2. 读已提交：可解决脏读
+3. 可重复读：虽然未彻底解决幻读（==Innodb默认隔离级别==），但很大程度上避免了幻读
+    - **快照读**（普通select查询）：由 MVCC（多版本并发控制）实现。
+        - 实现的方式是开始事务后（执行 begin 语句后），在执行第一个查询语句后，会创建一个 Read View
+        - 后续的查询语句利用这个 Read View，通过这个 Read View 就可以在 undo log 版本链找到事务开始时的数据
+        - 所以事务过程中每次查询的数据都一样
+        - 即使中途有其他事务插入了新纪录，是查询不出来这条数据的，这样就很好了避免幻读问题
+    - **当前读**（除了普通查询是快照读，其他都是当前读）：next-key lock临键锁（即**记录锁+间隙锁**）。
+4. 串行化：可解决所有问题，但串行效率低，性能差
+5. **隔离水平由1-4逐渐增加，数据越安全，但性能也越差**
+
+####  MVCC（多版本并发控制）
+维护一个数据的多个版本，使得读写操作没有冲突
+1. 实现原理
+    1. 隐藏字段
+        - DB_TRX_ID：最近修改事务id
+        - DB_ROLL_PIR：回滚指针，指向**这条记录**的上一个版本，配合undo log
+        - DB_ROW_ID：隐藏主键，若表没有主键，将会生成该隐藏字段
+    2. undo log
+        - 逻辑日志。更新操作时候会生成相反操作的命令
+        - insert时的undo log日志只在回滚时需要，在事务提交后会被立即删除
+        - update和delete时的undo log日志不仅在回滚时需要，MVCC版本访问也需要，所以不会被立即删除
+    3. undo log版本链
+### 日志
+1. redo log与undo log区别？
+2. 为什么需要buffer pool？与redo log怎么配合使用？
+3. 为什么需要redo log？
+4. 为什么需要undo log？
+### 锁
+1. 全局锁
+2. 表级锁
+    - 表锁
+    - 元数据锁（MDL）
+    - 意向锁
+    - AUTO-INC 锁
+3. 行级锁的三大类型：
+    - Record Lock：记录锁。仅仅把**一条记录**锁上
+        - 当一个事务对一条记录加了 S 型记录锁后，其他事务也可以继续对该记录加 S 型记录锁（S 型与 S 锁兼容），但是不可以对该记录加 X 型记录锁（S 型与 X 锁不兼容）;
+        - 当一个事务对一条记录加了 X 型记录锁后，其他事务既不可以对该记录加 S 型记录锁（S 型与 X 锁不兼容），也不可以对该记录加 X 型记录锁（X 型与 X 锁不兼容）。
+    - Gap Lock：间隙锁。**锁定一个范围，但是不包含记录本身**。（只存在于可重复读隔离级别，目的是为了解决可重复读隔离级别下幻读的现象。）
+    - Next-Key Lock：Record Lock + Gap Lock的组合。**锁定一个范围，并且锁定记录本身**
