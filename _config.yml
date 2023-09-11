@@ -114,7 +114,7 @@ jsonContent:
       title: true
       date: true
       path: true
-      text: false
+      text: true
       raw: false
       content: false
       slug: false

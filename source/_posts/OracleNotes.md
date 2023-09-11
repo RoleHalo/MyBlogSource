@@ -13,7 +13,7 @@ toc: true
 ### 修改密码：
 1. 先登录sys用户
 2. alter user 用户名 identified by 密码    
-***在知道自己的密码情况下可以直接使用password命令直接修改密码***
+在知道自己的密码情况下可以直接使用password命令直接修改密码
 
 ### 解锁用户：
 1. 先登录sys用户
@@ -25,7 +25,7 @@ toc: true
 
 ### 在进行网络配置的时候出现：ORA-12514: TNS:监听程序当前无法识别连接描述符中请求的服务解决方案
 
-**解决方案：**
+解决方案：
 1. 配置监听器
 2. 配置listener.ora 此目录下：F:\app\windows\product\11.2.0\dbhome_1\NETWORK\ADMIN
 3. 在里面添加如下内容：
@@ -72,20 +72,19 @@ sqlplus sys/Lm20191103@orcl as sysdba
 ```
   
 
-#### **1. 最重要的区别，存储的数据的重要性不同** 
-
-##### **sys:**     
- **sys是超级用户。**
+#### 1. 最重要的区别，存储的数据的重要性不同
+##### sys:     
+1. sys是超级用户。
 2. 所有Oracle的数据字典的基表和视图都存放在sys用户空间中，这些基表和视图对于Oracle的运行是至关重要的，由数据库自已维护，任何用户都不能手动更改。
-2. sys用户自动创建，拥有dba,sysdba,sysoper等角色或权限，是Oracle权限最高的用户。
+3. sys用户自动创建，拥有dba,sysdba,sysoper等角色或权限，是Oracle权限最高的用户。
 
-##### **system:**
-**system:数据库内置的普通管理员。** 
+##### system:
+1. system:数据库内置的普通管理员。
 1. system用户空间用于存放次一级的内部数据，如Oracle的 一些特性或工具的管理信息。
 2. system用户自动创建，拥有dba, sysdba 等角色或系统权限。
 
-#### **2. 其次的区别，权限的不同。**
-**最直接的区别： sys 可以创建数据库，而system不可以。**   
+#### 2. 其次的区别，权限的不同。
+1. 最直接的区别： sys 可以创建数据库，而system不可以。
 1. sys用户必须以as sysdba形式登录。
 2. sysdba属于system privilege,也称为administrative   privilege,拥有例如数据库开启关闭之类些系统管理级别的权限。
 
@@ -101,7 +100,7 @@ sqlplus sys/Lm20191103@orcl as sysdba
 ```
 
 
-1. **连接命令：**    
+1. 连接命令：   
     1. conn[ect]
     - 用法: conn 用户名/密码@网络服务标识[as sysdbal/sysoper]
     - 当用特权用户身份连接时，必须带上as sysdba或as
@@ -117,7 +116,7 @@ sqlplus sys/Lm20191103@orcl as sysdba
     ```
 
         
-2. **编辑命令:**    
+2. 编辑命令: 
 
     1. List: 显示缓冲区内容(显示上一条命令)    
     - 语法格式: L[ist]
@@ -134,7 +133,7 @@ sqlplus sys/Lm20191103@orcl as sysdba
 	语法格式：change /old/new
 	4.  run(/) : 执行缓冲区中的SQL语句
 	
-3. **举例:**
+3. 举例:
 
     + System登录显示scott.emp表内容。
    
@@ -148,40 +147,40 @@ sqlplus sys/Lm20191103@orcl as sysdba
 	 SQL >run
     ```
 
-    **因为行编辑麻烦，所以使用Edit命令编辑缓冲区。Edit命令打
+    因为行编辑麻烦，所以使用Edit命令编辑缓冲区。Edit命令打
 	开Notepad对缓冲区的内容进行操作编辑。    
-    *SQL>Edit***
+    SQL>Edit
 
-4. **save命令**    
-**把当前SQL缓冲区的内容保存到指定的文件当中。**    
-**save的语法是:**    
+4. save命令   
+把当前SQL缓冲区的内容保存到指定的文件当中。  
+save的语法是:   
 SAV[E] [FILE] file_ name [Create] | [REPLACE]|[APPEND]
     - Append表示把当前的内容添加到已经存在的文件中。
     - Replace表示覆盖当前已有的文件。默认的扩展名是.sql
     - 例子： `SQL>select * from scott.emp; SQL>save e:\SQL_employee.sql `   
-    **把当前缓冲区中的内容存到文件SQL_employee.sql中**
+    把当前缓冲区中的内容存到文件SQL_employee.sql中
 
-5.  **get命令**    
-**把文件内容调入缓冲区。**
+5.  get命令  
+把文件内容调入缓冲区。
     -  get的语法是：`get filename [LIST] [NOLIST]   ` 
     ` SQL>get e:\SQL_employee.sql`
 
     -  Edit命令也可以打开编辑指定的sq|脚本:
 	`  SQL >edit e:\SQL_employee.sql;`
 
-6. **Start和@命令**    
-**调用执行脚本文件。**    
+6. Start和@命令   
+调用执行脚本文件。 
     - start命令语法:     
     `start filename [arg1 arg2..]`
     `SQL>start e:\sql_employee.sql`    
     - @命令语法:
     `@filename [arg1 arg2..]` 
     `SQL>@e:\sql_employee.sql`
-	- 两个命令的**差别**在于:
+	- 两个命令的差别在于:
 	    - start的只能在Sqlplus会话内部使用
 	    - @命令既可以在会话内部运行，也可以在启动sqlplus时的命令行级别运行。
 	    - 
-1.  **spool 命令**
+1.  spool 命令
 	- 格式: spool filename
 	- 说明:该命令可以把sq|*plus屏幕上的内容输出到指定文件，包括你输入的sq|语句及其执行结果。
 	``` 
@@ -192,16 +191,16 @@ SAV[E] [FILE] file_ name [Create] | [REPLACE]|[APPEND]
 	(只有关闭spool输出，才会在输出文件中看到输出的内容)
 	> 如在d:\b.sql,建立文本文件，内容有select * from emp;以及输出结果。
 	
-5. **describe命令返回存储对象的描述。**
+5. describe命令返回存储对象的描述。
 	- sQL>desc 表名; 显示表结构
 
-5. **环境变量的显示与设置命令**    
-- **显示:**    
+5. 环境变量的显示与设置命令  
+- 显示:  
 
   `SQL >show al`
 
   `SQL >show linesize pagesize`
-- **设置:**
+- 设置:
     
     ` SQL>set linesize 100 pagesize 20`
 
@@ -221,33 +220,32 @@ SAV[E] [FILE] file_ name [Create] | [REPLACE]|[APPEND]
 
 # 第二章 ： 系统结构：
 1. 数据库服务器的主要组成以及这些组成部分之间的联系和操作方式。
-    1. ==服务器==：磁盘上的数据库（DB）和对磁盘上的数据进行管理的数据库管理系统（）
+    1. 服务器：磁盘上的数据库（DB）和对磁盘上的数据进行管理的数据库管理系统（）
     2. DB：对应数据库的的存储结构
 
 2. Oracle数据库存储结构分为：
     1. 物理存储：数据库在操作系统中的数据组织与管理方式。文件、数据块
     2. 逻辑存储：数据库在数据库系统内部的数据组织与管理方式。数据表等
-    <br/>
-**关系**：一般物理储存结构变现为一系列文件形式，是可见的；
+关系：一般物理储存结构变现为一系列文件形式，是可见的；
 逻辑存储结构是对物理存储结构的组织一管理，一般是不可见的。
 
 
 
 3. 数据库：是用于保存数据的一系列物理结构和逻辑结构
-4. 软件结构（实例）：DBMS的运行方式。包括：==内存结构==和==后台运行==。在服务器运行过程中内存结构 和一些列 进程 组成的。每个运行的Oracle数据库都对应一个Oracle例程，成为实例
+4. 软件结构（实例）：DBMS的运行方式。包括：内存结构和后台运行。在服务器运行过程中内存结构 和一些列 进程 组成的。每个运行的Oracle数据库都对应一个Oracle例程，成为实例
 
-==总结:==<br/>
-Oracle数据库服务器由数据库和实例组成<br/>
-==数据库和实例的关系==：<br/>
+总结:
+Oracle数据库服务器由数据库和实例组成
+数据库和实例的关系：
 数据库是Oracle用于保存数据的一系列物理结构和逻辑结构
 用户直接与实例交互，由实例访问数据库。每个数据库至少有
 一个与之对应的实例
-![图片1](D2C9738ED6884BE7891C3511E2F9F90A)
+![Oracle图片1](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片1.png)
 ## 物理结构
 
-1. **数据文件(.DBF)**：用于储存数据库中所有数据；
-2. **控制文件(.CTL)**：用于记录和描述数据库的物理存储结构信息
-3. **（重做）日志文件(.log)**：用于记录外部程序（用户）对数据库的修改操作
+1. 数据文件(.DBF)：用于储存数据库中所有数据；
+2. 控制文件(.CTL)：用于记录和描述数据库的物理存储结构信息
+3. （重做）日志文件(.log)：用于记录外部程序（用户）对数据库的修改操作
 4. 初始化参数(.ORA):用于设置数据库启动时参数初始值;
 5. 跟踪文件:用于记录用户进程、数据库后台进程的运行情况;
 6. 归档文件(.ARC) :用于保存已经写满的重做日志文件
@@ -257,44 +255,44 @@ Oracle数据库服务器由数据库和实例组成<br/>
 ## 逻辑结构
 数据库的逻辑结构是面向用户的，描述了数据库在逻辑上是如何组织和存储数据,数据库的逻辑结构支配一一个数据库如何使用其物理空间。
 ### 数据块(多个)-->区(多个)-->段(多个)-->表空间(多个)-->数据库
-1. ==数据块==：最小的逻辑存储单元（即最小的I/o读写单元）。分为标准块和非标准块两种。  由数据库初始化参数 DB_BLOCK_SIZE 设置，大小不变。
-![image](D05110F9BDF842899FADCDB27E81DED8)
+1. 数据块：最小的逻辑存储单元（即最小的I/o读写单元）。分为标准块和非标准块两种。  由数据库初始化参数 DB_BLOCK_SIZE 设置，大小不变。
+![Oracle图片2](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片2.png)
 2. ==区==：由一系列连续的数据块构成的逻辑存储单元，是存储空间分配的最小单元。（例：空表也会被分配一个区）
 3. ==段==：由一个或多个连续或不联系的区组成的逻辑存储单元。分类：表段、索引段、临时段、回退段
 4. ==表空间==：Oracle数据库最大的逻辑存储单元。由多个段组成。一个表空间可以对应若干 数据文件（属于物理逻辑存储结构）。
     1. 表空间分类：
         1. 系统表空间
         2. 非系统表空间：撤销表空间、临时表空间、用户表空间
-![image](42B50EE4E3494D5A977BE0E037DBE1CD)
+![Oracle图片3](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片3.png)
 
-#### ==物理和逻辑存储结构的对应关系:==<br/>
-**Oracle数据库的物理存储结构与逻辑存储结构之间的基本关系**:
+#### 物理和逻辑存储结构的对应关系:
+Oracle数据库的物理存储结构与逻辑存储结构之间的基本关系:
 1. 一个数据库在物理上包含多个数据文件，在逻辑上包含多个表空间。
 2. 一个表空间包含一个或多个数据文件，一个数据文件只能从属于某个表空间。
 3. 数据库的逻辑块由一个或多个操作系统块构成。一个逻辑区只能从属于
 一个数据文件，而一个数据文件可包含一个或多个逻辑区
-![图片2](56F4FD35605941D68EF2D0D42F5D291A)
+![Oracle图片4](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片4.png)
 
 ## 内存结构
 
-1. **系统全局区SGA：是一组共享内存结构**
-    1. ==数据高速缓冲区（Data Buffer Cache）==：
+1. 系统全局区SGA：是一组共享内存结构
+    1. 数据高速缓冲区（Data Buffer Cache）：
         - 在数据缓冲区中被修改后的数据由数据写入进程(DBWR)写到硬盘的数据文件中永久保存。
         - 提高获取和更新数据的性能
         1. 大小：DB_CACHE_SIZE
-        3. 数据高速缓冲区越大，用户需要的数据在内存中的可能性越大，即缓存命中率高，从而减少了Oracle访问硬盘数据的次数，提高数据库系统执行的效率。**需要确定一个合理的数据数据缓冲区的大小。**
-        ![图片3](EEF41ACD87284AD4B71061815039AE72)
-        4. ==缓冲块的类型==:
-            - **脏缓存块(Dirty Buffers)** :脏缓存块中保存的是已经被修改过的数据。
-            - **空闲缓存块(FreeBuffers)**:空闲缓存块中不包含任何数据，它们等待后台进程或服务器进程向其中写入数据。
-            -  **命中缓存块(PinnedBuffers)**:命中缓存块是那些正被使用的数据块，同时还有很多会话等待修改或访问的数据块。
-            - **干净缓存块(CleanBuffers**):干净缓存块是指那些当前没有被使用，即将被换出内存的缓存块。
-    ![图片4](1B3BC661F99A488CB198FE14752E7959)
-    2. ==重做日志缓冲区==：
+        3. 数据高速缓冲区越大，用户需要的数据在内存中的可能性越大，即缓存命中率高，从而减少了Oracle访问硬盘数据的次数，提高数据库系统执行的效率。需要确定一个合理的数据数据缓冲区的大小。
+        ![Oracle图片5](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片5.png)
+        4. 缓冲块的类型:
+            - 脏缓存块(Dirty Buffers) :脏缓存块中保存的是已经被修改过的数据。
+            - 空闲缓存块(FreeBuffers):空闲缓存块中不包含任何数据，它们等待后台进程或服务器进程向其中写入数据。
+            -  命中缓存块(PinnedBuffers):命中缓存块是那些正被使用的数据块，同时还有很多会话等待修改或访问的数据块。
+            - 干净缓存块(CleanBuffers):干净缓存块是指那些当前没有被使用，即将被换出内存的缓存块。
+    ![Oracle图片6](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片6.png)
+    2. 重做日志缓冲区：
         3. 存放数据库事务提交的操作信息，这些信息对数据库的恢复有着重要作用。当重做日志缓冲区被添满时，由日志写入进程把重做日志缓冲区的内容写到磁盘的重做日志文件中保存。
         3. 大小：log_buffer
         4. log_ buffer值越 大，重做日志缓冲区就可以存放更多的事务提交的记录，减少了数据被频繁写入到重做日志文件中的次数。
-    3. ==共享池==：库高速缓存、数据字典高速缓存
+    3. 共享池：库高速缓存、数据字典高速缓存
         1. 功能：用于缓存与sql和pl/sql语句、数据字典、资源锁以及其他控制结构相关数据
         2. 组成：
             1. 库缓存：用于缓存已经解释并执行过的sql语句和pl/sql程序代码，以提高sql或pl/sql程序的执行效率；包括sql工作区和pl/sql工作区
@@ -304,7 +302,7 @@ Oracle数据库服务器由数据库和实例组成<br/>
     3. 大型池(Large Pool)：用于缓冲大型 I/O 请求的可选区域，以便支持并行查询、共享服务器、Oracle XA 以及某些类型的备份操作
     4. 流池(stream Pool)：由 Oracle Streams 使用
     5. java池(Java Pool)：用于存放 Java 虚拟机 (JVM) 中特定于会话的 Java 代码和数据
-2. **程序全局区PGA（大小和SGA相比小很多，通常不讲）**：保存用户私有的
+2. 程序全局区PGA（大小和SGA相比小很多，通常不讲）：保存用户私有的
     1. 排序区：
     2. 游标信息区：
     3. 会话信息区
@@ -320,20 +318,19 @@ Oracle数据库服务器由数据库和实例组成<br/>
     - 进程强调执行过程，而程序仅仅是指令的有序集合。
     
     1. 用户进程
-    1.  ==服务器进程(Server process)==:服务器进程是接收用户进程信息，并根据请求与数据库进行通信。这些通信实现数据操作，完成用户对数据库数据的处理要求。
+    1.  服务器进程(Server process):服务器进程是接收用户进程信息，并根据请求与数据库进行通信。这些通信实现数据操作，完成用户对数据库数据的处理要求。
     1. 服务器进程主要完成以下任务:
         - 解析并执行用户提交的sql语句及PL/sql程序;
         - SGA的数据高速缓冲区中搜索用户进程所要访问的在数据，如果数据不在缓冲区中，则需要从硬盘数据文件中读取所需的数据，再讲它们复制到缓冲区中;
         - 将用户改变数据库的操作信息写入日志缓冲区中;
         - 将查询或执行后的结果数据返回给用户进程;
-    2. ==后台进程==:
+    2. 后台进程:
         1. 为了保证Oracle数据库在任意一个时刻可以处理多用户的并发请求，进行复杂的数据操作，而且还要优化系统性能，Oracle数据库起用了一些相互独立的附加进程，称为后台进程。服务器进程在执行用户进程请求时，调用后台进程来实现对数据库的操作。
     1. 后台进程主要完成以下任务:
         - 在内存与磁盘之间进行I/0操作;
         - 监视各个服务器进程状态;
         - 协调各个服务器进程的任务;
         - 维护系统性能和可靠性等。
-
 ### Oracle例程后台进程
 1. 数据库写入进程(DBWR )
 2. 日志写入进程(LGWR)
@@ -341,33 +338,30 @@ Oracle数据库服务器由数据库和实例组成<br/>
 4. 查点进程(CKPT)
 5. 系统监控进程(SMON)
 6. 进程监控进程(PMON)等
-![image](D4BE12DE07FE445A9290EC18EA93DCF7)
+![Oracle图片7](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片7.png)
 
 1.==数据库写入进程(DBWR)==
 - 数据库写入进程(databasewriter,DBwr)将缓冲区里的数据写入到数据文件。数据库写入进程的作用是将已更改的数据块从内存写入数据文件。使缓冲区有更多的空闲缓冲块，保证服务进程将所需要的数据从数据文件中读取到数据高速缓冲区，提高缓存命中率。
 - 默认情况下，启动例程时只启动了一个数据库写入进程，即为DBW0
 - 初始化参数DB_ WRITER PROCESSES最多定义20个数据库写入进程执行写入操作
 - 每个数据库写入进程都分配了0~9或a~j编号
-
-2.==日志写入进程(LGWR)==
+2.日志写入进程(LGWR)
 - 日志写入进程负责把重做日志缓冲区的数据写入重做日志文
 件中永久保存。
 - 数据库写入进程在工作之前，需要了解日志写入进程是否已
 经把相关的日志缓冲区中记载的数据写入重做日志文件中，
 如果相关的日志缓冲区中的记录还没有被写入，DBWR会通
 知LGWR完成相应的工作，然后DBWR才开始写入。
-
 3. 检查点进程（CKPT）
 - 检查点是一个事件，当该事件发生时（每隔一段时间发生），==DBWR==进程把数据高速缓冲区中==脏缓存块==写入数据文件中，同时Oracle将对数据库控制文件和数据文件的头部的==同步序号==进行更新，以记录下当前的数据库结构和形态，以确保数据文件、控制文件和重做日志文件的一致性
-- 
-![image](68A2412A07984BBE8C8FD07B9580EF11)
+![Oracle图片8](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片8.png)
 4. SMON
 - 功能：在  启动时负责对数据库进行恢复
 - 回收不再使用的临时空间
 - 将各个表控件的空闲碎片合并
 - 
 5. PMON（进程监控进程）
- ![image](6CF0B74B0A8C4146A2F30F084C25A288)
+ ![Oracle图片9](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片9.png)
 6. 日志归档进程（ARCH）
 - 归档进程负责在日志切换后将已经写满的重做日志文件复制到归档目标中，防止写满的重做日志文件被覆盖
 - 最多可启动十个归档进程
@@ -415,9 +409,9 @@ Oracle数据库服务器由数据库和实例组成<br/>
     SQL> SELECT * FROM dict columns WHERE
     TABLE NAME='USER TABLES';
     ```
-- **静态数据字典表的使用**
+- 静态数据字典表的使用
     - 静态数据字典表只能由Oracle进行维护，用户不能对这些表进行直接操作。
-- **静态数据字典视图的使用**
+- 静态数据字典视图的使用
     - 通常，用户通过对静态数据字典视图的查询可以获取所需要的所有数据库信息。Oracle静 态数据字典视图可以分为3类，各类视图具有独特的前缀。
     
     名称前缀 |  含义
@@ -425,12 +419,12 @@ Oracle数据库服务器由数据库和实例组成<br/>
     USER_ |  包含了当前数据库用户所拥有的所有模式对象的信息
     ALL_  |   包含了当前数据库用户可以访问的所有模式对象的信息
     DBA_  | 包含了所有数据库对象信息，只有具有DBA角色的用户才能够访问这些视图
-- **动态性能表的使用**
+- 动态性能表的使用
     - 动态性能表都属于SYS用户，Oracle使用这些表生成动态性能视图。
-- **动态性能视图的使用**
+- 动态性能视图的使用
     - 动态性能视图是SYS用户所拥有的，在默认情况下，只有SYS用户和拥有DBA角色的用户可以访问。与静态数据字典表和视图不同，在数据库启动的不同阶段只能访问不同的动态性能视图。 
 
-![image](52DFD29282224339B512019C6B5867E1)
+![Oracle图片10](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片10.png)
 
 --- 
 
@@ -450,13 +444,11 @@ Oracle数据库服务器由数据库和实例组成<br/>
 
 
 ## 表空间
-![image](FE5636C2F29147CB95574D8AF984ECA2)
-##### 1.表空间时Oracle数据库中最大的逻辑容器
-##### 2.一个表空间包含多个数据文件
-##### 3.数据库容量在物理上有数据文件的大小和数量决定，逻辑上由表空间大小和数量决定
-
-![image](95B6926ACF894D539625A7CC07D9A058)
-
+![Oracle图片11](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片11.png)
+1.表空间时Oracle数据库中最大的逻辑容器
+2.一个表空间包含多个数据文件
+3.数据库容量在物理上有数据文件的大小和数量决定，逻辑上由表空间大小和数量决定
+![Oracle图片12](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片12.png)
 ### 1.创建表空间
 1. 在创建本地管理方式下的表空间时，首先应该确定表空间的名称类型、对应的数据文件的名称和位置以及表空间的管理方式、区的分配方式、段的管理方式。
 2. 表空间名称不能超过30个字符，必须以字母开头，可以包含字母数字以及一些特殊字符等;
@@ -472,20 +464,14 @@ Oracle数据库服务器由数据库和实例组成<br/>
         SIZE 50M EXTENT MANAGEMENT LOCAL UNIFORM SIZE 512K 
         SEGMENT SPACE MANAGEMENT MANUAL;
     ```
-    
 注： EXTENT MANAGEMENT LOCAL :表空间定置管理（可以不写，目前大多默认）
-<br/>
-<br/>
 ```
    例5：创建一个大文件表空间，文件大小为1G，区的分配采用定制方式。
     SQL> CREATE BIGFILE TABLESPACE big_tbs DATAFILE
     'd:\app\administrator\oradata\orcl\big01.dbf' 
     SIZE 1G UNIFORM SIZE 512K;
 ```  
-    
 注意：大文件表空间中段的管理只能采用自动管理方式，而不能采用手动管理方式。
- <br/>
-<br/>
 ```
         例6：创建一个临时表空间hrtemp1
     
@@ -510,20 +496,15 @@ Oracle数据库服务器由数据库和实例组成<br/>
 ```
 
 ### 修改表空间
-
 表空间创建之后，都可以对表空间进行修改，包括： 
 1. 表空间的扩展
     - 添加数据文件
     - 改变已有数据文件的大小
         - 改变数据文件的可扩展性
         - 重新设置数据文件的大小。
-        
-    
-> **扩展表空间方法一：为表空间添加数据文件**
->
-> 可以通过ALTER TABLESPACE…ADD DATAFILE语句为永久表空间添加数据文件。
->
-> 通过ALTER TABLESPACE…ADD TEMPFILE语句为临时表空间添加数据文件。
+- 扩展表空间方法一：为表空间添加数据文件
+- 可以通过ALTER TABLESPACE…ADD DATAFILE语句为永久表空间添加数据文件。
+- 通过ALTER TABLESPACE…ADD TEMPFILE语句为临时表空间添加数据文件。
 
 ```
     例9：向USERS表空间中添加一个大小为10MB的数据文件。
@@ -533,16 +514,14 @@ Oracle数据库服务器由数据库和实例组成<br/>
         SIZE 10M;  
 ```
     
-> **说明：**
-    > 1. 如果添加的文件不存在，正常增加
-    > 2. reuse语句使用是针对已经删除的表空间中的文件（但在操作系统层面没有删除的文件）
+- 说明：
+    1. 如果添加的文件不存在，正常增加
+    2. reuse语句使用是针对已经删除的表空间中的文件（但在操作系统层面没有删除的文件）
 
-> **扩展表空间之方法二：改变数据文件的大小1**
->
->可以通过改变表空间已有数据文件的大小，达到扩展表空间的目的。
-> 
-> 如果在创建表空间或为表空间增加数据文件时没有指定AUTOEXTEND ON选项，则该文件的大小是固定的。如果为数据文件指定了AUTOEXTEND ON选项，当数据文件被填满时，数据文件会自动扩展，即表空间被扩展了。
+- 扩展表空间之方法二：改变数据文件的大小1
+- 可以通过改变表空间已有数据文件的大小，达到扩展表空间的目的。
 
+- 如果在创建表空间或为表空间增加数据文件时没有指定AUTOEXTEND ON选项，则该文件的大小是固定的。如果为数据文件指定了AUTOEXTEND ON选项，当数据文件被填满时，数据文件会自动扩展，即表空间被扩展了。
 ```
     例11：修改USERS表空间数据文件users02.dbf为自动增长方式。
        
@@ -550,27 +529,22 @@ Oracle数据库服务器由数据库和实例组成<br/>
         'd:\app\administrator\oradata\users02.dbf'               
         AUTOEXTEND ON NEXT 1M MAXSIZE UNLIMITED;
 ```
-
 ```
      例12：取消USERS表空间数据文件USERS02.DBF的自动增长方式。
         SQL>ALTER DATABASE DATAFILE
         'd:\app\administrator\oradata\users02.dbf'
         AUTOEXTEND OFF;
-        
 ```    
-> **扩展表空间之方法三：改变数据文件的大小2**
->
->可以使用`ALTER DATABASE DATAFILE…RESIZE` 改变表空间已有数据文件的大小。
-```
-    例13：将USERS表空间的数据文件users02.dbf大小设置为8MB。
-    
-        SQL>ALTER DATABASE DATAFILE 
-        'd:\app\administrator\oradata\users02.dbf'RESIZE 8M;
-```   
-
+- 扩展表空间之方法三：改变数据文件的大小2
+- 可以使用`ALTER DATABASE DATAFILE…RESIZE` 改变表空间已有数据文件的大小。
+    ```
+        例13：将USERS表空间的数据文件users02.dbf大小设置为8MB。
+        
+            SQL>ALTER DATABASE DATAFILE 
+            'd:\app\administrator\oradata\users02.dbf'RESIZE 8M;
+    ```   
 2. 可用性
 3. 读/写状态的修改
-
 
 ### 表空间删除
 1. 语法: `DROP TABLESPACE tablespace_name`
@@ -584,11 +558,12 @@ Oracle数据库服务器由数据库和实例组成<br/>
     INCLUDING CONTENTS AND DATAFILES;
     ```
 2. 如果其他表空间中的约束（外键）引用了要删除表空间中的主键或者唯一性约束，需要使用`CASCADE CONSTRAINTS`子句删除参照完整性约束，否则删除表空间时会报错。
-- 删除hrundo1表空间，同时删除其所对应的数据文件，以及其他表空间中与hrundo1表空间相关的参照完整性约束。
-    ``` 
-     DROP TABLESPACE hrundo1 INCLUDING CONTENTS   
-      AND DATAFILES CASCADE CONSTRAINTS;
-    ```
+    - 删除hrundo1表空间，同时删除其所对应的数据文件，以及其他表空间中与hrundo1表空间相关的参照完整性约束。
+        ``` 
+         DROP TABLESPACE hrundo1 INCLUDING CONTENTS   
+          AND DATAFILES CASCADE CONSTRAINTS;
+        ```
+
 ### 查询表空间信息
 1. 表空间信息:
     - DBA_TABLESPACES
@@ -602,29 +577,25 @@ Oracle数据库服务器由数据库和实例组成<br/>
     
 >表空间描述:<br/>
     `SQL> SELECT tablespace_name,block_size,initial_extent,max_extents FROM dba_tablespaces;`
-> ![image](8C732887C84D4C1B8912C0E8BF87452D)
-
+> ![Oracle图片13](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片13.png)
 
 > 查询表空间的名称,区管理方式,存储分配方式,类型等基本信息:<br/>
     `SELECT tablespace_name,extent_management,allocaton_type,contents FROM dba_tablespaces;`
->
 > 查询表空间的数据文件信息:<br/>
     `SELECT file_name,blocks,tablespace_name 
     FROM dba_data_files;`
->    
 > 查询数据文件的基本信息:<br/>
     `SELECT name ,file#,rfile#,status,bytes
     FROM v$datafile;`
->
 > **注： #，表示什么的号，一般为数字列。**
 
- 
 ### 数据文件设置与管理
 - 数据文件(Data files)用于存储数据和相关脚本的文件，包括系统数据(数据字典)、用户数据(表、索引、簇等)、撤销(Undo)数据、临时数据等。
     - 数据文件存储两种类型的数据：用户数据和系统数据。
         1. 用户数据.用户数据是指用于应用系统的数据，包括与应用系统的所有相关信息。如本书的人力资源管理系统中的员工信息表、职位信息、部门信息等。
         2. 系统数据.系统数据是指用于管理用户数据和Oracle数据库本身的数据。如表的结构、空间、用户、数据文件的位置（存放路径、访问时间等），数据字典。
 > Oracle数据库中有一种特殊的数据文件，称为临时数据文件，属于数据库的临时表空间。临时数据文件中的内容是临时性的，在一定条件下自动释放。
+
 ### 数据文件
 - 数据文件的存储策略
     - 由于对数据库的操作最终转换为对数据文件的操作，因此在数据库运行过程中对数据文件进行频繁的读写操作。为了提供I/O效率，应该合理的分配数据文件的存储位置。
@@ -635,12 +606,8 @@ Oracle数据库服务器由数据库和实例组成<br/>
     1. 一个表空间可以包含几个数据文件<BR/>
     2. 一个数据文件只能对应一个表空间
     
-![image](9709E3CEDCFC441EB0A2721D7F8C7E8C)
-
-
+![Oracle图片14](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片14.png)
 ---
-
-
 
 - 数据文件的管理
     - 创建数据文件
@@ -699,7 +666,7 @@ Oracle数据库服务器由数据库和实例组成<br/>
 
     - 临时数据文件可用性的改变
     `ALTER DATABASE TEMPFILE… ONLINE|OFFLINE`
-4. 例子：（数据文件脱机后--需要进行恢复--再联机---才可以完成联机）
+4. 例子：（数据文件脱机后需要进行恢复再联机才可以完成联机）
     ```
     1. 将USERS表空间的数据文件USERS02.DBF脱机
        SQL>ALTER DATABASE DATAFILE 
@@ -782,7 +749,7 @@ Oracle数据库服务器由数据库和实例组成<br/>
     - (5) 当前日志序列号 
     - (6) 检查点信息 
     - (7) 关于重做日志和归档的当前状态信息 
-![image](A8F03F25A97644EE8B3C4C011984C452)
+![Oracle图片15](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片15.png)
 
     - v$controlfile中保存着控制文件信息的最基本信息。
     - (1) DESC  v$controlfile;
@@ -851,23 +818,23 @@ Oracle数据库启动的基本步骤
    ==startup nomount== //读取初始化参数init.ora文件，启动instance，即启动SGA和后台进程，这种启动只需要init.ora文件。这种方式启动下可执行：重建控制文件、重建数据库
 2. mount ： 执行“nomount”，然后打开控制文件，确认数据文件和联机日志文件的位置，但此时不对数据文件和日志文件进行校验检查(是否存在)。这种方式启动下可执行：数据库日志归档、数据库介质恢复、使数据文件联机或脱机。
 3. open ：先执行“nomount”，然后执行“mount”，再打开包括Redo log文件在内的所有数据库文件，即所有数据文件，日志文件。这种方式下可访问数据库中的数据。可以对全体用户提供服务了。
-![image](D6A98377406C481AA831B8B9D8E4C5F5)
+![Oracle图片16](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片16.png)
 
 
 ### 实现多路复用控制文件
-==1.控制文件多路复用的特点==
+1.控制文件多路复用的特点
 1. 在数据库服务器上将控制文件存放在多个磁盘分区或者多块硬盘上。
 2. 数据库系统在需要更新控制文件的时候，就会自动同时更新多个控制文件。如此的话，当其中一个控制文件出现损坏时，系统会自动启用另外的控制文件。所以采用多路复用控制文件可以在很大程度上提高控制文件的安全性。
 3. 最重要的是，在控制文件转换的过程之中，不会有停机现象的产生。
 4. 多个镜像文件通过参数文件的 control_files设置。
 <br/>
 
-==2.多路复用控制文件创建步骤==
+2.多路复用控制文件创建步骤
 1. 编辑初始化参数CONTROL_FILES 
-用来(从==逻辑上==（dbms角度）增加控制文件。)
+用来(从逻辑上（dbms角度）增加控制文件。)
 2. 关闭数据库 
 `SHUTDOWN IMMEDIATE; `
-3. 拷贝一个原有的控制文件到新的位置，并重新命名(从==物理上==（操作系统角度）增加控制文件，与第一步中增加的文件相对应。)
+3. 拷贝一个原有的控制文件到新的位置，并重新命名(从物理上（操作系统角度）增加控制文件，与第一步中增加的文件相对应。)
 4. 重新启动数据库 
 STARTUP 
 - 例子：
@@ -893,33 +860,16 @@ STARTUP
 
 
 ---
-==操作：==
-- ![image](A7136ECEA4314BE5815A877DC125DD4D)
+操作：
+- ![Oracle图片17](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片17.png)
 - 退出数据库，
 - 在操作系统下建好要添加的控制文件
-![image](913045B08BC94A839C2D3CE886E8026D)
+![Oracle图片18](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片18.png)
 - ORA-01507错误处理：
-    - ![image](89C84D594C6C44159176168AE26ADCF6)
-    - 
-    - 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    - ![Oracle图片19](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片19.png)
 
 # 第六章
-![image](850F678DF30F4223B6D586A4A20B8DE4)
+![Oracle图片20](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片20.png)
 ####    5. DQL:数据检索，包括select
 ### 模式
 1. 创建数据库，并完成数据库的存储设置后，就可以根据应用的需求设计来创建所需要的数据库对象，并使用这些数据库对象。
@@ -1067,7 +1017,7 @@ CACHE、NOCACHE  表中数据是否缓存
     - 如果需要将表一部分设置为只读，另一部分为可更新的，必须对表进行分区;
 
 #### 范围分区：
-- ==语法:==
+- 语法:
 ```
         create table table(…)
         partition by range (column1[,column2,…])
@@ -1083,7 +1033,7 @@ CACHE、NOCACHE  表中数据是否缓存
     - VALUES LESS THAN：设置分区列值的上界。
     - TABLESPACE：设置分区对应的表空间。
 
-- ==例子：==
+- 例子：
     ```
     创建一个分区表，将学生信息根据其出生日期不同进行分区，将1980年1月1日前出生的学生信息保存在TBS1表空间，
     1980年1月1日到1990年1月1日出生的学生信息保存在TBS2表空间中，其他学生信息保存在TBS3表空间中。 
@@ -1151,9 +1101,9 @@ CREATE TABLESPACE TBS1 DATAFILE  'E:\oracle\product\10.2.0\oradata\orcl\ORCLTBS1
             ); 
     ```
 #### 复合分区
-1.  ++复合分区包括:++
-    - ==范围-列表复合分区:==
-        - 范围-列表复合分区==先对表进行范围分区==，然后再对==每个分区进行列表分区==，即==在一个范围分区中创建多个列表子分区。==
+1.  复合分区包括:
+    - 范围-列表复合分区:
+        - 范围-列表复合分区先对表进行范围分区，然后再对每个分区进行列表分区，即在一个范围分区中创建多个列表子分区。
         - 创建一个范围-列表复合分区表，将1980年1月1日前出生的男、女学生信息分别保存在TBS1和TBS2表空间中，1980年1月1日到1990年1月1日出生的男、女学生信息分别保存在TBS3和TBS4表空间中，其他学生信息保存在TBS5表空间间中。  创建一个范围-列表复合分区表，将1980年1月1日前出生的男、女学生信息分别保存在TBS1和TBS2表空间中，1980年1月1日到1990年1月1日出生的男、女学生信息分别保存在TBS3和TBS4表空间中，其他学生信息保存在TBS5表空间中。
     
     ```
@@ -1175,8 +1125,8 @@ CREATE TABLESPACE TBS1 DATAFILE  'E:\oracle\product\10.2.0\oradata\orcl\ORCLTBS1
         ); 
     
     ```
-    - ==范围-散列复合分区:==
-        - 范围-散列复合分区==先对表进行范围分区==，然后再==对每个分区进行散列分区==，即==在一个范围分区中创建多个散列子分区。==
+    - 范围-散列复合分区:
+        - 范围-散列复合分区先对表进行范围分区，然后再对每个分区进行散列分区，即在一个范围分区中创建多个散列子分区。
         - 示例:
         - 创建一个范围-散列复合分区表，将1980年1月1日前出生的学生信息均匀地保存在ORCLTBS1和ORCLTBS2表空间中，1980年1月1日到1990年1月1日出生的学生信息保存在ORCLTBS3和ORCLTBS4表空间中，其他学生信息保存在ORCLTBS5表空间中。  
     ```
@@ -1198,11 +1148,9 @@ CREATE TABLESPACE TBS1 DATAFILE  'E:\oracle\product\10.2.0\oradata\orcl\ORCLTBS1
       	);
     
     ```
-- ==创建复合分区时需要指定:==
+- 创建复合分区时需要指定:
     - 分区方法`（partition by range）`
     - 分区列
     - 子分区方法`（subpartition by hash， subpartition by list）`
     - 子分区列
     - 每个分区中子分区数量或子分区的描述。
-
-# 第七章 数据操纵与事务处理
