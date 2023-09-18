@@ -302,7 +302,7 @@ Oracle数据库服务器由数据库和实例组成
 数据库是Oracle用于保存数据的一系列物理结构和逻辑结构
 用户直接与实例交互，由实例访问数据库。每个数据库至少有
 一个与之对应的实例
-![Oracle图片1](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片1.png)
+![Oracle图片1](https://gitee.com/RoleHalo/blog-image/raw/master/image/Oracle图片1.png)
 ## 物理结构
 
 1. 数据文件(.DBF)：用于储存数据库中所有数据；
@@ -318,14 +318,14 @@ Oracle数据库服务器由数据库和实例组成
 数据库的逻辑结构是面向用户的，描述了数据库在逻辑上是如何组织和存储数据,数据库的逻辑结构支配一一个数据库如何使用其物理空间。
 ### 数据块(多个)-->区(多个)-->段(多个)-->表空间(多个)-->数据库
 1. 数据块：最小的逻辑存储单元（即最小的I/o读写单元）。分为标准块和非标准块两种。  由数据库初始化参数 DB_BLOCK_SIZE 设置，大小不变。
-![Oracle图片2](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片2.png)
+![Oracle图片2](https://gitee.com/RoleHalo/blog-image/raw/master/image/Oracle图片2.png)
 2. ==区==：由一系列连续的数据块构成的逻辑存储单元，是存储空间分配的最小单元。（例：空表也会被分配一个区）
 3. ==段==：由一个或多个连续或不联系的区组成的逻辑存储单元。分类：表段、索引段、临时段、回退段
 4. ==表空间==：Oracle数据库最大的逻辑存储单元。由多个段组成。一个表空间可以对应若干 数据文件（属于物理逻辑存储结构）。
     1. 表空间分类：
         1. 系统表空间
         2. 非系统表空间：撤销表空间、临时表空间、用户表空间
-![Oracle图片3](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片3.png)
+![Oracle图片3](https://gitee.com/RoleHalo/blog-image/raw/master/image/Oracle图片3.png)
 
 #### 物理和逻辑存储结构的对应关系:
 Oracle数据库的物理存储结构与逻辑存储结构之间的基本关系:
@@ -333,7 +333,7 @@ Oracle数据库的物理存储结构与逻辑存储结构之间的基本关系:
 2. 一个表空间包含一个或多个数据文件，一个数据文件只能从属于某个表空间。
 3. 数据库的逻辑块由一个或多个操作系统块构成。一个逻辑区只能从属于
 一个数据文件，而一个数据文件可包含一个或多个逻辑区
-![Oracle图片4](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片4.png)
+![Oracle图片4](https://gitee.com/RoleHalo/blog-image/raw/master/image/Oracle图片4.png)
 
 ## 内存结构
 1. 系统全局区SGA：是一组共享内存结构
@@ -342,13 +342,13 @@ Oracle数据库的物理存储结构与逻辑存储结构之间的基本关系:
         - 提高获取和更新数据的性能
         1. 大小：DB_CACHE_SIZE
         3. 数据高速缓冲区越大，用户需要的数据在内存中的可能性越大，即缓存命中率高，从而减少了Oracle访问硬盘数据的次数，提高数据库系统执行的效率。需要确定一个合理的数据数据缓冲区的大小。
-        ![Oracle图片5](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片5.png)
+        ![Oracle图片5](https://gitee.com/RoleHalo/blog-image/raw/master/image/Oracle图片5.png)
         4. 缓冲块的类型:
             - 脏缓存块(Dirty Buffers) :脏缓存块中保存的是已经被修改过的数据。
             - 空闲缓存块(FreeBuffers):空闲缓存块中不包含任何数据，它们等待后台进程或服务器进程向其中写入数据。
             -  命中缓存块(PinnedBuffers):命中缓存块是那些正被使用的数据块，同时还有很多会话等待修改或访问的数据块。
             - 干净缓存块(CleanBuffers):干净缓存块是指那些当前没有被使用，即将被换出内存的缓存块。
-    ![Oracle图片6](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片6.png)
+    ![Oracle图片6](https://gitee.com/RoleHalo/blog-image/raw/master/image/Oracle图片6.png)
     2. 重做日志缓冲区：
         3. 存放数据库事务提交的操作信息，这些信息对数据库的恢复有着重要作用。当重做日志缓冲区被添满时，由日志写入进程把重做日志缓冲区的内容写到磁盘的重做日志文件中保存。
         3. 大小：log_buffer
@@ -399,7 +399,7 @@ Oracle数据库的物理存储结构与逻辑存储结构之间的基本关系:
 4. 查点进程(CKPT)
 5. 系统监控进程(SMON)
 6. 进程监控进程(PMON)等
-![Oracle图片7](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片7.png)
+![Oracle图片7](https://gitee.com/RoleHalo/blog-image/raw/master/image/Oracle图片7.png)
 
 1.==数据库写入进程(DBWR)==
 - 数据库写入进程(databasewriter,DBwr)将缓冲区里的数据写入到数据文件。数据库写入进程的作用是将已更改的数据块从内存写入数据文件。使缓冲区有更多的空闲缓冲块，保证服务进程将所需要的数据从数据文件中读取到数据高速缓冲区，提高缓存命中率。
@@ -415,14 +415,14 @@ Oracle数据库的物理存储结构与逻辑存储结构之间的基本关系:
 知LGWR完成相应的工作，然后DBWR才开始写入。
 3. 检查点进程（CKPT）
 - 检查点是一个事件，当该事件发生时（每隔一段时间发生），==DBWR==进程把数据高速缓冲区中==脏缓存块==写入数据文件中，同时Oracle将对数据库控制文件和数据文件的头部的==同步序号==进行更新，以记录下当前的数据库结构和形态，以确保数据文件、控制文件和重做日志文件的一致性
-![Oracle图片8](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片8.png)
+![Oracle图片8](https://gitee.com/RoleHalo/blog-image/raw/master/image/Oracle图片8.png)
 4. SMON
 - 功能：在  启动时负责对数据库进行恢复
 - 回收不再使用的临时空间
 - 将各个表控件的空闲碎片合并
 - 
 5. PMON（进程监控进程）
- ![Oracle图片9](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片9.png)
+ ![Oracle图片9](https://gitee.com/RoleHalo/blog-image/raw/master/image/Oracle图片9.png)
 6. 日志归档进程（ARCH）
 - 归档进程负责在日志切换后将已经写满的重做日志文件复制到归档目标中，防止写满的重做日志文件被覆盖
 - 最多可启动十个归档进程
@@ -485,7 +485,7 @@ Oracle数据库的物理存储结构与逻辑存储结构之间的基本关系:
 - 动态性能视图的使用
     - 动态性能视图是SYS用户所拥有的，在默认情况下，只有SYS用户和拥有DBA角色的用户可以访问。与静态数据字典表和视图不同，在数据库启动的不同阶段只能访问不同的动态性能视图。 
 
-![Oracle图片10](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片10.png)
+![Oracle图片10](https://gitee.com/RoleHalo/blog-image/raw/master/image/Oracle图片10.png)
 
 --- 
 
@@ -505,11 +505,11 @@ Oracle数据库的物理存储结构与逻辑存储结构之间的基本关系:
 
 
 ## 表空间
-![Oracle图片11](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片11.png)
+![Oracle图片11](https://gitee.com/RoleHalo/blog-image/raw/master/image/Oracle图片11.png)
 1.表空间时Oracle数据库中最大的逻辑容器
 2.一个表空间包含多个数据文件
 3.数据库容量在物理上有数据文件的大小和数量决定，逻辑上由表空间大小和数量决定
-![Oracle图片12](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片12.png)
+![Oracle图片12](https://gitee.com/RoleHalo/blog-image/raw/master/image/Oracle图片12.png)
 ### 1.创建表空间
 1. 在创建本地管理方式下的表空间时，首先应该确定表空间的名称类型、对应的数据文件的名称和位置以及表空间的管理方式、区的分配方式、段的管理方式。
 2. 表空间名称不能超过30个字符，必须以字母开头，可以包含字母数字以及一些特殊字符等;
@@ -638,7 +638,7 @@ Oracle数据库的物理存储结构与逻辑存储结构之间的基本关系:
     
 >表空间描述:<br/>
     `SQL> SELECT tablespace_name,block_size,initial_extent,max_extents FROM dba_tablespaces;`
-> ![Oracle图片13](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片13.png)
+> ![Oracle图片13](https://gitee.com/RoleHalo/blog-image/raw/master/image/Oracle图片13.png)
 
 > 查询表空间的名称,区管理方式,存储分配方式,类型等基本信息:<br/>
     `SELECT tablespace_name,extent_management,allocaton_type,contents FROM dba_tablespaces;`
@@ -667,7 +667,7 @@ Oracle数据库的物理存储结构与逻辑存储结构之间的基本关系:
     1. 一个表空间可以包含几个数据文件<BR/>
     2. 一个数据文件只能对应一个表空间
     
-![Oracle图片14](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片14.png)
+![Oracle图片14](https://gitee.com/RoleHalo/blog-image/raw/master/image/Oracle图片14.png)
 ---
 
 - 数据文件的管理
@@ -810,7 +810,7 @@ Oracle数据库的物理存储结构与逻辑存储结构之间的基本关系:
     - (5) 当前日志序列号 
     - (6) 检查点信息 
     - (7) 关于重做日志和归档的当前状态信息 
-![Oracle图片15](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片15.png)
+![Oracle图片15](https://gitee.com/RoleHalo/blog-image/raw/master/image/Oracle图片15.png)
 
     - v$controlfile中保存着控制文件信息的最基本信息。
     - (1) DESC  v$controlfile;
@@ -879,7 +879,7 @@ Oracle数据库启动的基本步骤
    ==startup nomount== //读取初始化参数init.ora文件，启动instance，即启动SGA和后台进程，这种启动只需要init.ora文件。这种方式启动下可执行：重建控制文件、重建数据库
 2. mount ： 执行“nomount”，然后打开控制文件，确认数据文件和联机日志文件的位置，但此时不对数据文件和日志文件进行校验检查(是否存在)。这种方式启动下可执行：数据库日志归档、数据库介质恢复、使数据文件联机或脱机。
 3. open ：先执行“nomount”，然后执行“mount”，再打开包括Redo log文件在内的所有数据库文件，即所有数据文件，日志文件。这种方式下可访问数据库中的数据。可以对全体用户提供服务了。
-![Oracle图片16](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片16.png)
+![Oracle图片16](https://gitee.com/RoleHalo/blog-image/raw/master/image/Oracle图片16.png)
 
 
 ### 实现多路复用控制文件
@@ -922,15 +922,15 @@ STARTUP
 
 ---
 操作：
-- ![Oracle图片17](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片17.png)
+- ![Oracle图片17](https://gitee.com/RoleHalo/blog-image/raw/master/image/Oracle图片17.png)
 - 退出数据库，
 - 在操作系统下建好要添加的控制文件
-![Oracle图片18](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片18.png)
+![Oracle图片18](https://gitee.com/RoleHalo/blog-image/raw/master/image/Oracle图片18.png)
 - ORA-01507错误处理：
-    - ![Oracle图片19](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片19.png)
+    - ![Oracle图片19](https://gitee.com/RoleHalo/blog-image/raw/master/image/Oracle图片19.png)
 
 # 第六章
-![Oracle图片20](https://raw.githubusercontent.com/RoleHalo/MyBlogSource/main/image/Oracle图片20.png)
+![Oracle图片20](https://gitee.com/RoleHalo/blog-image/raw/master/image/Oracle图片20.png)
 ####    5. DQL:数据检索，包括select
 ### 模式
 1. 创建数据库，并完成数据库的存储设置后，就可以根据应用的需求设计来创建所需要的数据库对象，并使用这些数据库对象。

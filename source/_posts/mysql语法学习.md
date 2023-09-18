@@ -1,4 +1,9 @@
-[toc]
+---
+title: mysql语法再整理
+date: 2023-08-18 17:13:15
+tags: Mysql
+toc: true
+---
 
 # mysql语法学习
 
