@@ -104,8 +104,10 @@ theme: yilia
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: 'git'
-  repo: https://github.com/RoleHalo/rolehalo.github.io.git
-  branch: main
+  repo: 
+    github: https://github.com/RoleHalo/rolehalo.github.io.git
+    gitee: https://gitee.com/RoleHalo/RoleHalo.git
+  branch: master
 
 # 自动生成sitemap
 sitemap: 
