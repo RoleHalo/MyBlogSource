@@ -42,6 +42,7 @@ toc: true
         # 创建新表时将使用的默认存储引擎
         default-storage-engine=INNODB
     ```
+<!-- more -->
 3. 启动下 MySQL 数据库：`cd K:\softwareInstall\mysql-8.0.11\bin` `mysqld --initialize --console`
 在 Windows 系统下，以`管理员`身份打开命令窗口(cmd)，进入 MySQL 安装目录的 bin 目录。
     ```

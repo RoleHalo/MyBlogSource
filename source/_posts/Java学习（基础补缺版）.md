@@ -32,7 +32,7 @@ toc: true
         
     ```
 2. 使用命令：` javadoc -d mkdir -author -version 文件名.java`  创建文件夹为mkdir的网页文件夹
-    
+ <!-- more -->   
 #### API文档的说明
 1. API（Application programming interface，应用程序编程接口）
 

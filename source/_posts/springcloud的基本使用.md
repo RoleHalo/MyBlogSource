@@ -37,6 +37,7 @@ toc: true
     Nginx：1.24.0
 ```
 
+
 ## 远程调用
 RestTemplate | Feign远程调用
 ---|---
@@ -60,6 +61,7 @@ Http请求 | 声明式、基于SpringMVC注解
             String url = "http://userservice/user/"+order.getUserId();
             User user = restTemplate.getForObject(url, User.class);   //将结果自动封装为user类
         ```
+<!-- more -->
 ### Feign
 #### Feign远程调用
 feign内部已经封装了ribbon（==**注**：nacos负载均衡也是配置再ribbon下，所以ribbon和nacos的负载均衡规则不会冲突==），所以会自动实现服务的负载均衡
