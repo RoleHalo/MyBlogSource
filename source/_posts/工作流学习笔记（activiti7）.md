@@ -53,7 +53,7 @@ toc: true
     - [8.2.1 启动事件](#821-启动事件)
     - [8.2.2 中间事件](#822-中间事件)
     - [8.2.3 边界事件](#823-边界事件)
-<!-- more -->
+    <!-- more -->
 # 一、什么是工作流
 
 - 多个参与者之间按照某种预定义的规则自动进行传递文档、信息或任务的过程，进而实现某种预期的业务目标
@@ -271,7 +271,7 @@ ACT_GE_*：通用数据，用于不同场景下
 
 2. xml文件右键`View BPMN(Activiti) Diagram`后，点击相关元素设置`Assignee`（任务处理人）等属性
 
-   ![IDEA中查看BPMN](E:\Git_repositories\MyBlogSource\image\IDEA中查看BPMN.png)
+   ![IDEA中查看BPMN](https://gitee.com/RoleHalo/blog-image/raw/master/image/IDEA中查看BPMN.png)
 
 ## 3.3 流程操作
 
@@ -366,7 +366,7 @@ public void test04(){
 
 2. 发起流程成功后，可在数据库`act_ru_task`表中看到如下信息，`Assignee`是指当前流程处理人
 
-![流程发起act_ru_task表](E:\Git_repositories\MyBlogSource\image\流程发起act_ru_task表.png)
+![流程发起act_ru_task表](https://gitee.com/RoleHalo/blog-image/raw/master/image/流程发起act_ru_task表.png)
 
 ### 3.3.3 查询流程
 
@@ -877,15 +877,73 @@ public void test04(){
 
 ## 8.2 消息事件
 
-需要先定义消息事件
-
 ### 8.2.1 启动事件
+
+注意事项：
+
+1. 需要先**定义消息**事件，且给启动事件**绑定消息**（id）
+
+2. 只有顶层流程（toplevel process）才支持消息启动事件 ，嵌入流程（子流程）不支持消息事件
+
+3. ` runtimeService.startProcessInstanceByMessage("mg01");`传入的应该是act_ru_event_subscr表中的**event_name**  即流程图中定义的消息名称 而**不是消息ID**
+
+4. 消息的name和id不要用中文
+
+5. **消息的name和id需要一致 否则会报错说找不到** ( **具体原因？？？**)
+
+6. 注意事项：
+
+   1）流程的**消息名称必须是唯一**的，一个流程定义不得包含多个同名的启动消息。否则部署流程的时候就会抛异常
+
+   2）**消息启动事件，在所有部署的流程里面必须要唯一**，否则也会抛异常
+
+   3）直接启动消息定义事件，会当作一个普通启动事件执行
+
+   4）**新版本发布，会取消上一版本的消息订阅**
+
+   5）启动流程实例的三种方法
+
+   ```
+   1 ProcessInstance startProcessInstanceByMessage(String messageName);
+   2 ProcessInstance startProcessInstanceByMessage(String messageName, Map<String, Object> processVariables);
+   3 ProcessInstance startProcessInstanceByMessage(String messageName, String businessKey, Map<String, Object<
+   4 processVariables); 
+   ```
 
 ### 8.2.2 中间事件
 
+1. 设计流程：`“开始--->用户任务1--->消息中间事件--->用户任务2--->结束”`
+
+2. 部署流程
+
+3. `发起流程`并完成`用户任务1`后会进入`消息中间事件`，会**等待传入消息**从而触发消息事件
+
+4. 触发消息事件测试方法
+
+   ```java
+   /**
+        *触发消息事件
+        */
+       @Test
+       public void test3(){
+           ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
+           RuntimeService runtimeService = processEngine.getRuntimeService();
+   
+           Execution execution = runtimeService.createExecutionQuery()
+                   .processInstanceId("25001") //查询当前的 执行实例的 编号（Id）   即act_ru_execution表的proc_inst_id
+                   .onlyChildExecutions()//只查询子流程
+                   .singleResult();
+           //传入消息 触发消息事件
+           runtimeService.messageEventReceived("message", execution.getId());
+   
+       }
+   ```
+
 ### 8.2.3 边界事件
 
-
+1. 部署步骤完全类似于定时器边界事件
+2. 不同的是：需要在流程定义时进行定义和绑定消息
+3. 同样分为`非中断消息边界事件`和`中断消息边界事件`（注意区别）
 
 
 
